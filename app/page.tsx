@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import firebaseConfig from "./firebaseConfig";
@@ -13,61 +13,63 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const fetchUserRole = async (uid: string) => {
-    try {
-      const userDoc = await getDoc(doc(firebaseConfig.db, "users", uid));
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        if (userData && userData.role) {
-          // Redirect based on role upon successful login
-          router.replace(userData.role === "admin" ? "/admin" : "/client");
+  const fetchUserRole = useCallback(
+    async (uid: string) => {
+      try {
+        const userDoc = await getDoc(doc(firebaseConfig.db, "users", uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          if (userData && userData.role) {
+            // Redirect based on role upon successful login
+            router.replace(userData.role === "admin" ? "/admin" : "/client");
+          } else {
+            setError("User role not found");
+          }
         } else {
-          setError("User role not found");
+          setError("User not found");
         }
-      } else {
-        setError("User not found");
+      } catch (error) {
+        console.error("Error fetching user role:", error);
+        setError("Error fetching user role");
       }
+    },
+    [router]
+  );
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(firebaseConfig.auth, (user) => {
+      if (user) {
+        // If user is already logged in, redirect based on role
+        fetchUserRole(user.uid); // Fetch user role from database
+      }
+    });
+
+    // Cleanup function to unsubscribe from the auth state listener
+    return () => unsubscribe();
+  }, [fetchUserRole]);
+
+  function getErrorMessage(error: unknown) {
+    if (error instanceof Error) return error.message;
+    return String(error);
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        firebaseConfig.auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      fetchUserRole(user.uid); // Fetch user role from database
     } catch (error) {
-      console.error("Error fetching user role:", error);
-      setError("Error fetching user role");
+      setError(getErrorMessage(error));
     }
   };
 
- useEffect(() => {
-   const unsubscribe = onAuthStateChanged(firebaseConfig.auth, (user) => {
-     if (user) {
-       // If user is already logged in, redirect based on role
-       fetchUserRole(user.uid); // Fetch user role from database
-     }
-   });
-
-   // Cleanup function to unsubscribe from the auth state listener
-   return () => unsubscribe();
- }, [fetchUserRole]);
-
- function getErrorMessage(error: unknown) {
-   if (error instanceof Error) return error.message;
-   return String(error);
- }
-
- 
- const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-   event.preventDefault();
-
-   try {
-     const userCredential = await signInWithEmailAndPassword(
-       firebaseConfig.auth,
-       email,
-       password
-     );
-     const user = userCredential.user;
-     fetchUserRole(user.uid); // Fetch user role from database
-   } catch (error) {
-     setError(getErrorMessage(error));
-   }
- };
-
-   const handleForgotPassword = () => {
+  const handleForgotPassword = () => {
     // Redirect to forgot password page
     router.replace("/forget-password");
   };
@@ -76,7 +78,6 @@ export default function Login() {
     // Redirect to register page
     router.replace("/sign-up");
   };
-
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-cyan-950">
