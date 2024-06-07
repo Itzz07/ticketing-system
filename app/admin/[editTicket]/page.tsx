@@ -55,7 +55,7 @@ export default function Dashboard({
           const updatedComments = await Promise.all(
             comments.map(async (comment: Comment) => {
               const userDoc = await getDoc(
-                doc(firebaseConfig.db, "users", comment.userId)
+                doc(firebaseConfig.db, "userTicket", comment.userId)
               );
               const username = userDoc.exists()
                 ? userDoc.data().name

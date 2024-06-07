@@ -12,6 +12,16 @@ const firebaseConfig = {
   measurementId: "G-GY4KTWG0R7"
 };
 
+// const firebaseConfig = {
+//   apiKey: "AIzaSyA26NkMNZINJhiWAecwitVO7vKQbWhBKJk",
+//   authDomain: "frontier-finance-zambia.firebaseapp.com",
+//   projectId: "frontier-finance-zambia",
+//   storageBucket: "frontier-finance-zambia.appspot.com",
+//   messagingSenderId: "185041510818",
+//   appId: "1:185041510818:web:db01be2007c26fea8d52fb",
+//   measurementId: "G-YRVF1SMJGE",
+// };
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 

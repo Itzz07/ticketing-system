@@ -9,8 +9,9 @@ import { User } from "firebase/auth";
 
 export default function Client() {
   const router = useRouter();
-    const [user, setUser] = useState<User | null>(null);
-    const [userRole, setUserRole] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(
       firebaseConfig.auth,
@@ -38,7 +39,7 @@ export default function Client() {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [router]); // Include 'router' in the dependency array
 
   const handleLogout = async () => {
     try {
@@ -89,7 +90,7 @@ export default function Client() {
                 Dashboard
               </button>
             </li>
-           
+
             <li className="py-1 ">
               <button
                 onClick={handleLogout}

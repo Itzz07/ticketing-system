@@ -21,7 +21,6 @@ interface Ticket {
   comments: Comment[];
 }
 
-
 interface Comment {
   id: string;
   text: string;
