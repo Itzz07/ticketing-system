@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { sendPasswordResetEmail } from "firebase/auth";
 import firebaseConfig from "../firebaseConfig";
+import Image from "next/image"; // Import Image from next/image
 
 export default function ForgotPassword() {
   const router = useRouter();
@@ -44,12 +45,12 @@ function getErrorMessage(error: unknown) {
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
         >
           <div className="flex  justify-center">
-            <img
+            <Image
               className="object-cover  rounded mb-4"
               alt="hero"
               width={300}
               height={160}
-              src="Frontierlogo.jpg"
+              src="/Frontierlogo.jpg"
             />
           </div>
           <h1 className="text-3xl text-cyan-900 font-bold mb-2 text-center">

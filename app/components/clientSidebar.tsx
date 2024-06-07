@@ -6,6 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import firebaseConfig from "../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { User } from "firebase/auth";
+import Image from "next/image"; // Import Image from next/image
 
 export default function Client() {
   const router = useRouter();
@@ -58,7 +59,7 @@ export default function Client() {
         <div className="p-4">
           {/* logo  */}
           <div className="flex justify-center">
-            <img
+            <Image
               className="object-cover rounded mb-4"
               alt="hero"
               width={300}
