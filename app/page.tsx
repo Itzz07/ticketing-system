@@ -12,6 +12,27 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+
+  const fetchUserRole = async (uid: string) => {
+    try {
+      const userDoc = await getDoc(doc(firebaseConfig.db, "users", uid));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        if (userData && userData.role) {
+          // Redirect based on role upon successful login
+          router.replace(userData.role === "admin" ? "/admin" : "/client");
+        } else {
+          setError("User role not found");
+        }
+      } else {
+        setError("User not found");
+      }
+    } catch (error) {
+      console.error("Error fetching user role:", error);
+      setError("Error fetching user role");
+    }
+  };
+
  useEffect(() => {
    const unsubscribe = onAuthStateChanged(firebaseConfig.auth, (user) => {
      if (user) {
@@ -22,33 +43,14 @@ export default function Login() {
 
    // Cleanup function to unsubscribe from the auth state listener
    return () => unsubscribe();
- }, []);
+ }, [fetchUserRole]);
 
  function getErrorMessage(error: unknown) {
    if (error instanceof Error) return error.message;
    return String(error);
  }
 
- const fetchUserRole = async (uid: string) => {
-   try {
-     const userDoc = await getDoc(doc(firebaseConfig.db, "users", uid));
-     if (userDoc.exists()) {
-       const userData = userDoc.data();
-       if (userData && userData.role) {
-         // Redirect based on role upon successful login
-         router.replace(userData.role === "admin" ? "/admin" : "/client");
-       } else {
-         setError("User role not found");
-       }
-     } else {
-       setError("User not found");
-     }
-   } catch (error) {
-     console.error("Error fetching user role:", error);
-     setError("Error fetching user role");
-   }
- };
-
+ 
  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
    event.preventDefault();
 

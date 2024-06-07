@@ -41,7 +41,7 @@ export default function Client() {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [router]);
 
   const handleLogout = async () => {
     try {

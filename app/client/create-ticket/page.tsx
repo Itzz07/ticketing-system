@@ -89,7 +89,7 @@ export default function TicketForm() {
       {/* Sidebar */}
       <Sidebar />
       {/* Main content */}
-      <div className="flex-grow w-8/12 lg:w-10/12 py-8 px-64">
+      <div className="flex-grow w-8/12 lg:w-10/12 py-8 px-10 md:px-64">
         <div className="text-zinc-900 justify-between flex mt-8">
           <h1 className="text-2xl font-bold mb-8">Submit a Ticket</h1>
           {/* Back button */}
