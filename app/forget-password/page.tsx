@@ -87,7 +87,7 @@ function getErrorMessage(error: unknown) {
           </div>
           <div className="mt-4">
             <div className="text-zinc-700 font-medium">
-              Don't have an account{" "}
+              Don&apos;t have an account{" "}
               <button
                 type="button"
                 onClick={handleRegister}
