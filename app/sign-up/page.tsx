@@ -66,7 +66,7 @@ export default function Home() {
               alt="hero"
               width={300}
               height={160}
-              src="/Frontierlogo.jpg"
+              src="Frontierlogo.jpg"
             />
           </div>
           <h1 className="text-3xl text-cyan-900 font-bold mb-2 text-center">
