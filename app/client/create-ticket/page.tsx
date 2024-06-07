@@ -55,16 +55,16 @@ export default function TicketForm() {
 
       console.log("Email notification sent ", await response.json());
 
-      // // Add ticket data to Firestore
-      const docRef = await addDoc(collection(firebaseConfig.db, "tickets"), {
-        subject,
-        description,
-        creationDate,
-        status,
-        clientID, // Include the clientID in the ticket document
-      });
+      // // // Add ticket data to Firestore
+      // const docRef = await addDoc(collection(firebaseConfig.db, "tickets"), {
+      //   subject,
+      //   description,
+      //   creationDate,
+      //   status,
+      //   clientID, // Include the clientID in the ticket document
+      // });
 
-      console.log("Document written with ID: ", docRef.id);
+      // console.log("Document written with ID: ", docRef.id);
 
       // Show notification
       setNotification("Ticket submitted successfully.");
